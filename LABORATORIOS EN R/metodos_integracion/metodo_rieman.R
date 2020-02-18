@@ -97,20 +97,75 @@ mean(z > a & z <= b)
 
 
 
+####Trapezoid rule (Integration)#####
+trapezoid = function(ftn, a, b, n = 100){
+  #integral numerica de la funcion (ftn) desde a hata b usando la regla
+  # del trapecio con n subdivisiones 
+  #ftn  es una funcion de una variablex;
+  #asumir que a < b y n es un entero positivo
+  # h es el anncho de cad intervalo
+  h = (b -a )/n
+  # x.vec es un vector de a hasta b que tambien marca el comkienzo y el final de cada subintervalo
+  x.vec = seq(a,b, by = h)
+  # Dada la ftn es f(x), f.ve valores de y para cada x-sub-i
+  f.vec = sapply(x.vec, ftn)
+  # Implenetar la regla del trapecio sumando todas las areas
+  T = h*(f.vec[1]/2 + sum(f.vec[2] + f.vec[n+1]/2))
+  return(T)
+}
+#### estimar la integral enytre 0 y 1 de 4x^3 dx = 1
+
+
+ftn6 = function(x) return(4* x^3 )
+
+trapezoid(ftn6, 0, 1, n=20)
+trapezoid(ftn6, 0, 1, n=40)
+trapezoid(ftn6, 0, 1, n=60)
+trapezoid(ftn6, 0, 1, n=80)
+trapezoid(ftn6, 0, 1, n=100)
 
 
 
+### Integracion utilizando la Regla de simpson ######
+
+#  Divide bel intervalo [a , b] en n subintervalos, donde n 
+# es par, luego para cada pares de intervalos consecutivos, se calcula(aproxima)
+# el area de f(x) a travez de una parabola (polinomio de grado 2) 
+# Sea u < v < w van estar separados por tres puntos h. Para los puntod en eje x que pertenecen al intervalo
+# [u,w] queremos aproximar f(x) a travez de una parabola que pasa que pasa a travez de los puntos (u, f(u)),
+# (v, f(v)), y (w, f(w)). Para estos punto hay exactamente una parabola representada por
+# p(x) y se lo obtiene mediante la siguiente formula:
+
+# p(x)= f(u)()()/()()
 
 
+simpson_n = function(ftn, a,b, n = 100){
+  # integral numerica de ftn, desde a hasta b
+  #usando la regla de simpson con n subdivisiones
+  #
+  # ftn es un a funcion de uan sola variable 
+  # asumimos que a<b y n es un entero positivo par
+  # Asegurar que n es par(4 es el numero minimo de intervalos para la regla de simpson)
+  # 
+  
+  n = max(c(2*(n%/%2),4))
+  # h es el ancho de cada intervalo
+  h = (b -a)/ n
+  # x-sub-i impar
+  x.vec1 = seq(a+h, b-h, by = 2*h)
+  # pares 
+  x.vec2 = seq(a+2*h, b-2*h, by =2*h)
+  
+  # calculo de los valores para y
+  f.vec1 = sapply(x.vec1, ftn)
+  f.vec2 = sapply(x.vec2, ftn)
+  S = h/3*(ftn(a) + 4*sum(f.vec1) + 2*sum(f.vec2) + ftn(b))
+  return(S)
+}
 
-
-
-
-
-
-
-
-
+ftn6 = function(x) 
+  return(4 * x^3)
+simpson_n(ftn6, 0, 1, 20)
 
 
 
